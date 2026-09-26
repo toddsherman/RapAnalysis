@@ -1,0 +1,5 @@
+duckdb>=1.5
+pandas>=3.0
+pyarrow>=25
+numpy
+requests

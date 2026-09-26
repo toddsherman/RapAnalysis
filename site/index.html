@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="/RapAnalysis/">
+<title>The Life Cycle of Rap Slang — Todd Sherman</title>
+<meta name="description" content="When rap slang arrives, who carries it, where it comes from, how long it lasts, and how long until pop says it. 243 terms tracked across 962,000 rap songs, 1988–2021.">
+<link rel="canonical" href="https://www.todd.sh/RapAnalysis">
+<link rel="icon" href="https://www.todd.sh/icon.png" type="image/png">
+<meta name="theme-color" content="#F4F1EA">
+<meta property="og:title" content="The Life Cycle of Rap Slang">
+<meta property="og:description" content="243 slang terms tracked across 962,000 rap songs, 1988–2021: arrivals, fades, crossovers, originators, regions, and shifting meanings.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://www.todd.sh/RapAnalysis">
+<meta property="og:image" content="https://www.todd.sh/project-previews/rap-analysis-palette.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@tdd">
+<link rel="stylesheet" href="styles.css">
+<script defer src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script defer src="app.js"></script>
+</head>
+<body>
+<a class="tsh-back" href="https://www.todd.sh"><span aria-hidden="true">&larr;</span>todd.sh</a>
+
+<main>
+  <header class="hero">
+    <h1 data-sanity-copy="title">The life cycle of rap slang</h1>
+    <p class="dek" data-sanity-copy="dek">When a word arrives in rap, who carries it, where it comes from, how long it lasts, and how long it takes pop to say it. 243 terms, tracked across nearly a million rap lyrics from 1988 to 2021.</p>
+    <div class="stats" id="stats" aria-live="polite"></div>
+  </header>
+
+  <nav class="toc" aria-label="Sections">
+    <a href="#rise">Rise and fall</a>
+    <a href="#calendar">Slang calendar</a>
+    <a href="#explorer">Look up a term</a>
+    <a href="#crossover">Crossover</a>
+    <a href="#origins">Who started it</a>
+    <a href="#turnover">Burning out faster?</a>
+    <a href="#meaning">New meanings</a>
+    <a href="#regions">Regions</a>
+    <a href="#method">Method</a>
+  </nav>
+
+  <section id="rise">
+    <div class="prose">
+      <p class="eyebrow">Rise and fall</p>
+      <h2 data-sanity-copy="rise_title">Every word has a shape</h2>
+      <p data-sanity-copy="rise_p1">The measure throughout is simple: of all the rap artists who released songs in a given year, what share used the word at least once. Counting artists rather than songs keeps one prolific rapper from manufacturing a trend. Some words climb, peak and all but vanish within a decade. Others are still climbing.</p>
+    </div>
+    <div class="figure wide">
+      <div class="fig-head">
+        <div><p class="fig-title">Share of active rap artists using each term, 1988–2021</p>
+        <p class="fig-sub">3-year average. Each panel is scaled to its own peak. Select one to open it below.</p></div>
+        <div class="legend"><span><i style="border-color:var(--red)"></i>Came and went</span><span><i style="border-color:var(--blue)"></i>Still climbing in 2021</span><span><i style="border-color:var(--ochre)"></i>Built to last</span></div>
+      </div>
+      <div class="multiples" id="multiples"></div>
+    </div>
+  </section>
+
+  <section id="calendar">
+    <div class="prose">
+      <p class="eyebrow">Slang calendar</p>
+      <h2 data-sanity-copy="calendar_title">Thirty years of peaks</h2>
+      <p data-sanity-copy="calendar_p1">Each dot is one term, placed at the year it peaked and sized by how many rap artists used it at that peak. Words that already had an ordinary English meaning are drawn as small hollow rings, because their counts mix old and new senses.</p>
+    </div>
+    <div class="figure wide">
+      <div class="fig-head">
+        <div><p class="fig-title">Peak year of every tracked term, by category</p>
+        <p class="fig-sub">Hover for details. Select a dot to open the term.</p></div>
+        <div class="legend"><span><i class="dot" style="background:var(--red)"></i>Faded</span><span><i class="dot" style="background:var(--ochre)"></i>Cooling</span><span><i class="dot" style="background:var(--blue)"></i>Rising</span><span><i class="dot" style="background:none;border:1.5px solid var(--stone)"></i>Also a standard word</span></div>
+      </div>
+      <div id="calendar-chart"></div>
+    </div>
+  </section>
+
+  <section id="explorer">
+    <div class="prose">
+      <p class="eyebrow">Look up a term</p>
+      <h2 data-sanity-copy="explorer_title">Any word, its whole life</h2>
+      <p data-sanity-copy="explorer_p1">Pick a term to see its adoption curve in rap against pop, R&amp;B, rock and country, the artists who used it first, the rappers who pushed it as it took off, and the artists who used it most.</p>
+    </div>
+    <div class="figure wide">
+      <div class="controls">
+        <label class="note" for="term-search">Term</label>
+        <input class="search" id="term-search" list="term-list" placeholder="Search 243 terms" autocomplete="off">
+        <datalist id="term-list"></datalist>
+        <div id="cat-chips" class="controls" style="margin:0"></div>
+      </div>
+      <div class="explorer">
+        <div class="explorer-main" id="term-main"></div>
+        <aside class="side" id="term-side"></aside>
+      </div>
+      <div class="term-index" id="term-index" aria-label="All terms"></div>
+    </div>
+  </section>
+
+  <section id="crossover">
+    <div class="prose">
+      <p class="eyebrow">Crossover</p>
+      <h2 data-sanity-copy="crossover_title">How long until pop says it?</h2>
+      <p id="crossover-lede" data-sanity-copy="crossover_p1">The same lyrics dataset covers pop, R&amp;B, rock and country, so each word's arrival in those genres can be timed against its take-off in rap. Take-off means the start of a word's final climb to its peak, the point where it reached a quarter of its peak usage.</p>
+    </div>
+    <div class="figure wide">
+      <div class="fig-head">
+        <div><p class="fig-title">Take-off year in rap versus R&amp;B and pop</p>
+        <p class="fig-sub">Terms with a clear take-off in pop. Words with older standard meanings are excluded.</p></div>
+        <div class="legend"><span><i class="dot" style="background:var(--blue)"></i>Rap</span><span><i class="dot" style="background:var(--ochre)"></i>R&amp;B</span><span><i class="dot" style="background:var(--red)"></i>Pop</span></div>
+      </div>
+      <div id="crossover-chart"></div>
+    </div>
+    <div class="figure wide">
+      <div class="fig-head">
+        <div><p class="fig-title">How far each term traveled</p>
+        <p class="fig-sub">Peak usage in each genre as a share of the word's peak in rap.</p></div>
+        <div class="controls" id="reach-genre" style="margin:0"></div>
+      </div>
+      <div id="reach-chart"></div>
+    </div>
+  </section>
+
+  <section id="origins">
+    <div class="prose">
+      <p class="eyebrow">Who started it</p>
+      <h2 data-sanity-copy="origins_title">Early adopters, popularizers, and owners</h2>
+      <p data-sanity-copy="origins_p1">For each word, three different groups of artists matter. Early adopters used it in the years before it took off. Popularizers are the rappers who used it most as it took off, weighted by how widely known they are, measured by how many language editions of Wikipedia cover them. Owners are the artists who used it in the most songs.</p>
+      <p class="note" data-sanity-copy="origins_note">Early adopter means earliest in this dataset, not the person who coined it. Genius dates are occasionally wrong, so songs dated years before the rest of an artist's catalog are ignored.</p>
+    </div>
+    <div class="figure wide"><div class="cards" id="cards"></div></div>
+  </section>
+
+  <section id="turnover">
+    <div class="prose">
+      <p class="eyebrow">Burning out faster?</p>
+      <h2 data-sanity-copy="turnover_title">Is slang turning over faster?</h2>
+      <p id="turnover-lede" data-sanity-copy="turnover_p1">The streaming era feels like a blur of disposable catchphrases. To test that, every rap-specific word that rose and peaked was grouped by the era of its peak and lined up on its peak year. The measure uses a fixed pool of established artists, so the 2018–2021 flood of one-off uploads doesn't pass for churn.</p>
+    </div>
+    <div class="figure wide">
+      <div class="fig-head">
+        <div><p class="fig-title">The typical life cycle, by the era a word peaked</p>
+        <p class="fig-sub">Median usage relative to peak, years before and after the peak.</p></div>
+        <div class="legend" id="cohort-legend"></div>
+      </div>
+      <div id="cohort-chart"></div>
+    </div>
+    <div class="figure wide">
+      <div class="fig-head"><div><p class="fig-title">Vocabulary that survives five years</p>
+      <p class="fig-sub">Of the 200 most-used rap-specific words in a year, the share still in the top 200 five years later.</p></div></div>
+      <div id="churn-chart"></div>
+    </div>
+  </section>
+
+  <section id="meaning">
+    <div class="prose">
+      <p class="eyebrow">New meanings</p>
+      <h2 data-sanity-copy="meaning_title">Same word, new meaning</h2>
+      <p>Some of rap's biggest recent words are old words with a new job. Each use of these words was sorted into a sense by the words around it: a <em>cap</em> next to <em>no</em> or <em>stop</em> is a lie, one next to <em>pop</em> or <em>bust</em> is a gunshot, and one next to <em>fitted</em> is a hat. Uses with no clear signal are left unclear.</p>
+    </div>
+    <div class="figure wide">
+      <div class="tabs" id="meaning-tabs" role="tablist"></div>
+      <div class="fig-head">
+        <div><p class="fig-title" id="meaning-title">Share of uses by sense</p>
+        <p class="fig-sub" id="meaning-sub"></p></div>
+        <div class="legend" id="meaning-legend"></div>
+      </div>
+      <div id="meaning-chart"></div>
+      <p class="fig-title" style="margin-top:26px">Words that most set each era apart</p>
+      <p class="fig-sub">Words appearing within eight words of the target that are most distinctive of each era compared with the others. The number is how many uses of the target they appeared next to.</p>
+      <div class="colloc" id="colloc"></div>
+    </div>
+  </section>
+
+  <section id="regions">
+    <div class="prose">
+      <p class="eyebrow">Regions</p>
+      <h2 data-sanity-copy="regions_title">Where slang comes from</h2>
+      <p id="regions-lede" data-sanity-copy="regions_p1">Artists were matched to where they came up using Wikidata and Wikipedia: hometowns, formation places, birthplaces and scene genres. That covers about 80% of rap songs released before 2010 but under 20% after 2015, when Genius fills up with uploads from artists with no public profile, so the regional picture is sharpest for the first two decades. The lists below show the words each region's artists use far more often than artists from everywhere else.</p>
+    </div>
+    <div class="figure wide">
+      <div class="fig-head"><div><p class="fig-title">Most distinctive words by region</p>
+      <p class="fig-sub" id="regions-sub">Bar length is the share of that region's artists who used the word. The number is how many times more often they used it than artists from everywhere else. Place names are listed separately as shout-outs.</p></div>
+      <div class="controls" id="region-era" style="margin:0"></div></div>
+      <div class="region-cols" id="region-cols"></div>
+    </div>
+    <div class="figure wide">
+      <div class="fig-head"><div><p class="fig-title">How regional terms spread</p>
+      <p class="fig-sub">Share of each region's artists using the term.</p></div>
+      <div class="controls" id="diffusion-pick" style="margin:0"></div></div>
+      <div id="diffusion-chart"></div>
+    </div>
+  </section>
+
+  <section id="method" class="method">
+    <div class="prose">
+      <h2 data-sanity-copy="method_title">How this was made</h2>
+      <p data-sanity-copy="method_p1">The lyrics come from a cleaned, English-only version of the Genius song lyrics dataset: about three million songs across rap, pop, R&amp;B, rock and country, each labeled with its main genre and year. Songs dated before 1988 or after 2021 were set aside. There are too few before 1988, and 2022 covers only part of the year. Genius's own translation accounts were removed.</p>
+      <ul>
+        <li data-sanity-copy="method_l1">Adoption is the share of each genre's active artists who used a term in at least one song that year, averaged over three years.</li>
+        <li data-sanity-copy="method_l2">The 243 terms, their spelling variants and their phrases were curated by hand, starting from words the data showed were far more common in rap than in other genres and that rose sharply at some point. Slurs are excluded.</li>
+        <li data-sanity-copy="method_l3">Take-off and peak are found by walking back from the peak year, so an older meaning of the same spelling doesn't pull the dates earlier.</li>
+        <li data-sanity-copy="method_l4">Genius skews heavily toward recent years and includes many amateur uploads. The turnover analysis uses a fixed pool of established artists to correct for this.</li>
+        <li data-sanity-copy="method_l5">Word senses come from keyword rules applied to the eight words on either side of each use. They're transparent and approximate.</li>
+        <li data-sanity-copy="method_l6">No lyrics are reproduced here. Only counts, artist names, song titles and single context words are shown.</li>
+      </ul>
+      <p class="note">Data: Genius lyrics from <a href="https://huggingface.co/datasets/theelderemo/genius-lyrics-cleaned">genius-lyrics-cleaned</a> by Christopher Dickinson (MIT license), a cleaned cut of the <a href="https://www.kaggle.com/datasets/carlosgdcj/genius-song-lyrics-with-language-information">Genius Song Lyrics with Language Information</a> dataset. Artist origins and fame from <a href="https://www.wikidata.org">Wikidata</a>. Code and data pipeline on <a href="https://github.com/toddsherman/RapAnalysis">GitHub</a>.</p>
+    </div>
+  </section>
+</main>
+<footer>Todd Sherman · <a href="https://www.todd.sh">todd.sh</a></footer>
+<div class="tip" id="tip" role="status"></div>
+
+<!-- Vercel Web Analytics: same-origin, so views through the todd.sh proxy are counted on the todd.sh project -->
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>

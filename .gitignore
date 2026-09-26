@@ -1,0 +1,17 @@
+# Source dataset (2.4 GB of Parquet) — download it yourself, see README
+/data/
+/.cache/
+
+# Intermediate tables and DuckDB working files (rebuilt by scripts/01–08)
+/derived/
+.duckdb_tmp/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Local tooling
+.claude/
+.DS_Store
+.vercel
