@@ -126,7 +126,10 @@ svg text { font-family: var(--sans); fill: var(--ink); }
 .plist li { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; border-bottom: 1px solid var(--line); }
 .plist li span:last-child { color: var(--stone); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .plist .t { display: block; color: var(--stone); font-size: 11px; }
-.term-index { display: flex; flex-wrap: wrap; gap: 4px 6px; margin-top: 14px; max-height: 220px; overflow: auto; padding: 8px 0; border-top: 1px solid var(--line); }
+.term-index { display: flex; flex-wrap: wrap; gap: 4px 6px; margin: 0 0 22px; max-height: 136px; overflow: auto; padding: 8px 0;
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.chip-n { color: var(--stone); margin-left: 4px; font-variant-numeric: tabular-nums; }
+.chip[aria-pressed="true"] .chip-n { color: var(--paper); opacity: .7; }
 .term-index button { font-family: var(--sans); font-size: 12px; border: 0; background: none; padding: 3px 5px; cursor: pointer; color: var(--ink); border-radius: 3px; }
 .term-index button:hover { color: var(--red); }
 .term-index button[aria-current="true"] { background: var(--ink); color: var(--paper); }

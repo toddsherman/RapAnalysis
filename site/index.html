@@ -85,13 +85,13 @@
         <label class="note" for="term-search">Term</label>
         <input class="search" id="term-search" list="term-list" placeholder="Search 243 terms" autocomplete="off">
         <datalist id="term-list"></datalist>
-        <div id="cat-chips" class="controls" style="margin:0"></div>
+        <div id="cat-chips" class="controls" style="margin:0" role="group" aria-label="Filter terms by category"></div>
       </div>
+      <div class="term-index" id="term-index" aria-label="Terms in the selected category"></div>
       <div class="explorer">
         <div class="explorer-main" id="term-main"></div>
         <aside class="side" id="term-side"></aside>
       </div>
-      <div class="term-index" id="term-index" aria-label="All terms"></div>
     </div>
   </section>
 

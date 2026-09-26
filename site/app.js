@@ -252,16 +252,30 @@
       const cats = ["all", ...Object.keys(CAT)];
       chips.innerHTML = "";
       cats.forEach((c) => {
-        const b = el("button", { class: "chip", type: "button", "aria-pressed": c === "all" }, c === "all" ? "All" : CAT[c]);
+        const n = c === "all" ? terms.terms.length : terms.terms.filter((t) => t.cat === c).length;
+        const b = el("button", { class: "chip", type: "button", "data-cat": c, "aria-pressed": c === "all" },
+          `${c === "all" ? "All" : CAT[c]} <span class="chip-n">${n}</span>`);
         b.addEventListener("click", () => {
-          explorerCat = c;
-          chips.querySelectorAll(".chip").forEach((x) => x.setAttribute("aria-pressed", x === b));
-          renderIndex();
+          setCategory(c);
+          // Open the category's most widely used term so the chart responds, unless the
+          // current term already belongs to it.
+          if (c !== "all" && T.get(state.term).cat !== c) {
+            const inCat = terms.terms.filter((t) => t.cat === c);
+            const top = [...inCat].sort((a, b) => (a.poly - b.poly) || (b.life.peak - a.life.peak))[0];
+            selectTerm(top.id, false);
+          }
+          track("category_filter", { category: c });
         });
         chips.appendChild(b);
       });
       renderIndex();
       renderers.push(() => state.term && renderTerm(state.term));
+    }
+
+    function setCategory(c) {
+      explorerCat = c;
+      document.querySelectorAll("#cat-chips .chip").forEach((x) => x.setAttribute("aria-pressed", x.dataset.cat === c));
+      renderIndex();
     }
 
     function renderIndex() {
@@ -277,6 +291,9 @@
 
     function selectTerm(id, scroll) {
       state.term = id;
+      // A term opened from elsewhere on the page (calendar, cards) switches the filter to its
+      // category, so it shows up highlighted in the list.
+      if (explorerCat !== "all" && T.get(id).cat !== explorerCat) setCategory(T.get(id).cat);
       renderTerm(id);
       document.querySelectorAll("#term-index button").forEach((b) => b.setAttribute("aria-current", b.textContent === T.get(id).label));
       document.getElementById("term-search").value = T.get(id).label;
